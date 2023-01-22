@@ -1,0 +1,55 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+```{r}
+cancer_data %>% 
+  filter(sex == "Female") %>% 
+  filter(cancer_site %in% c("Trachea, bronchus and lung", "Prostate", "Breast", "Colorectal")) %>% 
+  
+  
+ggplot() +
+  geom_col(aes(year, standardised_incidence_ratio, fill = cancer_site), 
+           position = "dodge")
+  
+```
+
+
+```{r}
+cancer_data %>% 
+  filter(cancer_site %in% c("Trachea, bronchus and lung", "Prostate", "Breast",
+                            "Colorectal")) %>% 
+  filter(!sex == "All") %>% 
+  filter(year > 2009) %>% 
+  group_by(cancer_site, year) %>% 
+  summarise(total = sum(incidences_all_ages)) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = total, colour = cancer_site)) +
+  geom_point(aes(x = year, y = total, colour = cancer_site))
+```
+
+
+```{r}
+rolling_avg <- cancer_data %>% 
+  filter(cancer_site %in% c("Trachea, bronchus and lung", "Prostate", "Breast",
+                            "Colorectal")) %>% 
+  filter(!sex == "All") %>% 
+  group_by(cancer_site, year) %>% 
+  summarise(total = sum(incidences_all_ages)) %>% 
+  mutate(roll_av = slider::slide_dbl(
+    .x = total, 
+    .f = ~ mean(.),
+    .before = 3, 
+    .after = 3
+  ))
+```
+
+
+```{r}
+rolling_avg %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = roll_av, colour = cancer_site))
+```

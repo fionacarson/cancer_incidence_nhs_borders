@@ -1,0 +1,53 @@
+cancer_site_icd10code,cancer_site,general_area,total
+C00-C14,"Lip, oral cavity and pharynx","Lip, oral cavity and pharynx",704
+"C00-C14, C30-C32",Head and neck,1,962
+"C00-C97, excluding C44",All cancer types,All except C44,36182
+C01-C02,Tongue,"Lip, oral cavity and pharynx",158
+C01-C06,Oral cavity,"Lip, oral cavity and pharynx",342
+"C01, C02.4, C05.1, C05.2, C09, C10",Oropharyngeal cancers,"Lip, oral cavity and pharynx",226
+C03-C06,Mouth (IARC definition),"Lip, oral cavity and pharynx",184
+C07-C08,Salivary glands,"Lip, oral cavity and pharynx",62
+C15,Oesophagus,Digestive Organs,1072
+C16,Stomach,Digestive Organs,834
+C18,Colon,Digestive Organs,3300
+C18-C20,Colorectal cancer,Digestive Organs,4982
+C19-C20,Rectum and rectosigmoid junction,Digestive Organs,1682
+C22,Liver and intrahepatic bile ducts,Digestive Organs,356
+C25,Pancreas,Digestive Organs,980
+C32,Larynx,Respiratory and intrathoracic organs,206
+C33-C34,"Trachea, bronchus and lung",Respiratory and intrathoracic organs,5036
+C40-C41,Bone and articular cartilage,Bone and articular cartilage,52
+"C40-C41, C47+C49",Bone and connective tissue,1,218
+C43,Malignant melanoma of the skin,Melanoma and other malignant neoplasms of skin,1464
+C44,Non-melanoma skin cancer,Melanoma and other malignant neoplasms of skin,12054
+"C44, M-8050-8078, M-8083-8084",Squamous cell carcinoma of the skin,Melanoma and other malignant neoplasms of skin,3992
+"C44, M-8090-8098",Basal cell carcinoma of the skin,Melanoma and other malignant neoplasms of skin,7968
+C45,Mesothelioma,Mesothelial and soft tissue,138
+C47+C49,Connective tissue,Mesothelial and soft tissue,166
+C50,Breast,Breast,5130
+C51,Vulva,Female genital organs,74
+C52,Vagina,Female genital organs,14
+C53,Cervix uteri,Female genital organs,153
+C53-C55,Uterus,Female genital organs,555
+C54,Corpus uteri,Female genital organs,379
+C56,Ovary,Female genital organs,387
+C60,Penis,Male genital organs,28
+C61,Prostate,Male genital organs,2206
+C62,Testis,Male genital organs,89
+C64-C65,Kidney,Urinary tract,1006
+C67,Bladder,Urinary tract,1054
+"C70-C72, C75.1-C75.3","Malig brain ca (incl pit. gland, cranio. duct, pineal gland)",1,564
+"C70-C72, C75.1-C75.3, D18.0, D32-D33, D35.2-D35.4, D42-D43, D44.3-D44.5",All brain and CNS tumours (malignant and non-malignant),1,1098
+C71,Malignant brain cancer,"Eye, brain and other parts of central nervous system",544
+C73,Thyroid,Thyroid and other endocrine glands,348
+C81,Hodgkin lymphoma,"Lymphoid, hematopoietic and related tissue",180
+C82-C86,Non-Hodgkin lymphoma,"Lymphoid, hematopoietic and related tissue",1356
+C90,Multiple myeloma and malignant plasma cell neoplasms,"Lymphoid, hematopoietic and related tissue",610
+C91-C95,Leukaemias,1,1036
+C91.0,Acute lymphoblastic leukaemia,"Lymphoid, hematopoietic and related tissue",76
+C91.1,Chronic lymphocytic leukaemia,"Lymphoid, hematopoietic and related tissue",434
+C92.0,Acute myeloid leukaemia,"Lymphoid, hematopoietic and related tissue",270
+C92.1-C92.2,Chronic myeloid leukaemia,"Lymphoid, hematopoietic and related tissue",84
+D05,Carcinoma in situ of the breast,1,540
+D06,Carcinoma in situ of the cervix uteri,1,1304
+"D18.0, D32-D33, D35.2-D35.4, D42-D43, D44.3-D44.5","Non-malig brain ca (incl pit.gland,cranio.duct,pineal gland)","Benign neoplasms, except benign neuroendocrine tumors",604

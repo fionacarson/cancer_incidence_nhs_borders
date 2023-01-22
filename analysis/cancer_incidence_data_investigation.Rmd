@@ -1,0 +1,310 @@
+---
+title: "Incidence of Cancer in NHS Borders"
+output:
+  html_document:
+    toc: yes
+    toc_float: true
+    toc_depth: '3'
+    highlight: tango
+    df_print: paged
+    code_folding: hide
+    theme: spacelab
+---
+
+
+```{r, warning=FALSE, echo = FALSE, message = FALSE}
+library(tidyverse)
+```
+
+
+```{r, warning=FALSE, echo = FALSE, message = FALSE}
+source(here::here("analysis/graph_theme_and_plot_colours.R"))
+```
+
+
+```{r, warning=FALSE, echo = FALSE, message = FALSE}
+cancer_data <- read_csv(here::here("clean_data/borders_cancer_data.csv"))
+
+population <- read_csv(here::here("raw_data/borders_population.csv")) %>% 
+  janitor::clean_names()
+
+age_data <- read_csv(here::here("clean_data/borders_age_data.csv"))  
+  
+```
+
+## Introduction
+
+### Question
+In order to help inform the planning for provision of cancer treatment services in NHS Borders, we would like to gain better understanding of the **incidence of cancer in NHS Borders.**
+
+From www.cancerresearchuk.org
+*"Incidence means how many people get a particular type of cancer. It is often written as the number of cancer cases per 100,000 people in the general population."*
+
+
+
+
+
+### Definitions and Backgroud Information
+Crude rate - the incidence rate calculated per 100,000 people 
+
+EASR and WASR - European and World age standardised rates.
+
+Standardised incidence ratio (SIR) - estimate of number of cancer cases in a given population compared to what might be expected higher than 100 means more cancer cases than expected. 
+
+There are 17 hospitals in the Borders but it seems that only Borders General Hospital in Melrose provides cancer treatment. The Borders Macmillan Centre provides chemotherapy and cancer care services. No information could be found about different departments. 
+
+**Throughout this analysis the number of incidences were used, rather than the standardised rates. This is because it was felt that the actual number of people with cancer is what the cancer services will have to deal with.** 
+
+### Assumptions
+**Population**
+An initial assumption was made that NHS Borders area and the Borders council area that population figures were quoted for were the same - this was researched further and documents found where NHS Borders quoted the same population figures. 
+
+**Non-melanoma Skin Cancer**
+Data on C44 non-melanoma skin cancer was not included in this report. The numbers were very large and the totals provided in the datasets excluded this category. Further research found an explanation of why it was generally excluded
+https://publichealthscotland.scot/media/12645/2022-04-12-cancer-incidence-report.pdf 
+the reasons are:  
+- In the interests of comparison with other countries, because not all cancer registries
+collect data on non-melanoma skin cancers.  
+- Only the first occurrence of a basal cell carcinoma (the most common type of nonmelanoma skin cancer) is collected in Scotland because they are so common.
+
+
+## Population and Overall Cancer Rates
+
+The population covered by NHS Borders is increasing. If we broke this down by age we would see that it is more older people and that the number of younger people is relatively static.  
+
+```{r}
+population %>% 
+  ggplot() +
+  geom_line(aes(year, population)) +
+  theme_fc() +
+  labs(title = "Population of NHS Borders Region",
+       y = "Number of People",
+       x = "Year")
+```
+
+The number of cases of cancer are increasing. 
+
+```{r}
+total_by_year <- cancer_data %>% 
+  filter(!sex == "All") %>% 
+  group_by(year) %>% 
+  summarise(total = sum(incidences_all_ages))
+
+ggplot() + 
+  geom_line(data = total_by_year, aes(year, total)) +
+  theme_fc() +
+  labs(title = "Cancer Cases in NHS Borders", 
+       y = "Number of Cases",
+       x = "Year")
+```
+
+The percentage of people in the population being diagnosed with cancer is increasing. 
+
+```{r, warning=FALSE, echo = FALSE, message = FALSE}
+left_join(population, total_by_year, by = "year") %>% 
+  rename(num_incidence = total) %>% 
+  mutate(percent_incidence = (num_incidence / population) * 100) %>% 
+  
+  ggplot() +
+  geom_line(aes(year, percent_incidence)) +
+  theme_fc() +
+  labs(title = "Cancer Cases as Percentage of Population",
+       y = "Cancer Cases (%)",
+       x = "Year")
+```
+
+
+
+## Incidence by Type of Cancer 
+
+Only looked at most recent 5 years, as I felt this was most relevant for informing on future incidence of cancer. This also ties in with the age distribution data discussed below which is summarised over the same 5 year time period. 
+
+The data shows that lung, prostrate, colorectal and breast cancer are the most common cancers in NHS Borders from 2016 - 2020 (making up 60% or all incidences) so further analysis was done to determine if these figures are going up or down. 
+
+```{r, warning=FALSE, echo = FALSE, message = FALSE}
+# The data contains a sex column with the values Male, Female and All. 
+# For All the Male and Female values have been added BUT for 7 cancers which 
+# are gender specific there is no "All" total so it is important not to filter 
+# the data on "All" as this gives only 19 cancer_sites and not the full 26.
+
+total_by_cancer_2016to20 <- cancer_data %>% 
+  filter(year >= 2016) %>% 
+  filter(!sex == "All") %>% 
+  group_by(cancer_site, sex) %>% 
+  summarise(total = sum(incidences_all_ages)) 
+
+  ggplot(total_by_cancer_2016to20) +
+  geom_col(aes(x = reorder(cancer_site, total), total, fill = sex)) +
+  theme_fc() +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_text(size = 9),
+        legend.position = c(0.8, 0.2),
+        legend.background = element_rect(fill = "white", colour = "white")) +
+  labs(title = "Cancer Incidence in NHS Borders",
+       subtitle = "2016 - 2020",
+       y = "Number of Incidences") +
+  coord_flip() +
+    scale_x_discrete(limits = c("Vagina", "Penis", "Vulva", "Mesothelioma", "Hodgkin lymphoma", "Bone and connective tissue", "Testis", "Thyroid", "Liver and intrahepatic bile ducts", "Malignant brain cancer", "Stomach", "Ovary", "Plasma cell neoplasms (inc multiple myeloma)", "Bladder", "Leukaemias", "Kidney", "Oesophagus", "Uterus", "Head and neck", "Pancreas", "Non-Hodgkin lymphoma", "Malignant melanoma of the skin", "Breast", "Colorectal", "Prostate", "Trachea, bronchus and lung")) +
+    scale_fill_manual(values = plot_colours)
+
+```
+
+
+## Is the incidence of each cancer type increasing?
+
+Filtered so that we have the cancers which had more than 100 cases over the 5 year period.   
+Applied a 6 year rolling average. 
+
+```{r, warning=FALSE, echo = FALSE, message = FALSE}
+more_than_100_cases <- total_by_cancer_2016to20 %>% 
+  group_by(cancer_site) %>% 
+  summarise(total = sum(total)) %>% 
+  filter(total > 100) %>% 
+  select(cancer_site) %>% 
+  pull()
+  
+```
+
+
+```{r, warning=FALSE, echo = FALSE, message = FALSE}
+rolling_avg <- cancer_data %>% 
+  filter(!sex == "All") %>% 
+  filter(cancer_site %in% more_than_100_cases) %>% 
+  group_by(cancer_site, year) %>% 
+  summarise(total = sum(incidences_all_ages)) %>% 
+  mutate(roll_av = slider::slide_dbl(
+    .x = total, 
+    .f = ~ mean(.),
+    .before = 3, 
+    .after = 3
+  ))
+```
+
+
+```{r}
+rolling_avg %>% 
+  mutate(cancer_site = case_when(
+    cancer_site == "Trachea, bronchus and lung" ~ "Lung",
+    cancer_site == "Malignant melanoma of the skin" ~ "Skin",
+    TRUE ~ cancer_site)) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = roll_av, colour = cancer_site)) +
+  facet_wrap(~cancer_site, scales = "free_y") +
+  theme_fc() +
+  theme(legend.position = "none") +
+  labs(title = "Incidence by Year and Cancer Type",
+       y = "Number of Cases (6 yr rolling average)",
+       x = "Year") +
+  scale_x_continuous(limits = c(1996, 2020), breaks = c(1996, 2008, 2020)) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 1))
+```
+
+There is a 3 year cycle for the breast cancer data
+
+"GP practices only take part in screening programmes every 3 years"
+
+## Incidence by Age
+
+As expected the number of incidences of cancer increase with increasing age up to around 65-69 years old.  
+The numbers decline after this which is believed to be due to the declining population in the oldest age groups. 
+
+```{r, warning=FALSE, echo = FALSE, message = FALSE}
+age_data %>% 
+  pivot_longer(cols = starts_with("age"), names_to = "age", 
+               values_to = "num_incidences") %>% 
+  group_by(age, sex) %>% 
+  summarise(total = sum(num_incidences)) %>% 
+  
+  ggplot() +
+  geom_col(aes(age, total, fill = sex), position = "dodge") +
+  theme_fc() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1,  hjust = 1, size = 10)) +
+  labs(title = "Age Distribution of Cancer Incidence",
+       y = "Number of Cases") +
+  scale_x_discrete(limits = c("age_under5", "age5to9", "age10to14", "age15to19", "age20to24", 
+                              "age25to29", "age30to34", "age35to39", "age40to44",
+                              "age45to49", "age50to54", "age55to59", "age60to64",
+                              "age65to69", "age70to74", "age75to79", "age80to84",
+                              "age85and_over"),
+                   labels = c("<5", "5-9", "10-14", "15-19", "20-24", "25-29", 
+                              "30-34", "35-39", "40-44", "45-49", "50-54", 
+                              "55-59", "60-64", "65-69", "70-74", "75-79", 
+                              "80-84", ">85")) +
+  scale_fill_manual(values = plot_colours)
+  
+```
+
+### Age distribution of the most common four cancers
+
+Prostate and lung cancer show quite pronounced peaks with the largest number of cases being in the 65-69 and 70-74 age range, respectively. 
+
+Colorectal cancer cases are higher for people in the older age bands, while breast cancer cases are high across a wide age range (50 - 80 years old).
+
+```{r, warning=FALSE, echo = FALSE, message = FALSE}
+age_data %>% 
+  pivot_longer(cols = starts_with("age"), names_to = "age", 
+               values_to = "num_incidences") %>% 
+  filter(cancer_site %in% c("Trachea, bronchus and lung", "Prostate", "Breast", "Colorectal")) %>% 
+  group_by(age, cancer_site) %>% 
+  summarise(total = sum(num_incidences)) %>% 
+  
+  ggplot() +
+  geom_col(aes(age, total), position = "dodge") +
+  theme_fc() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 9)) +
+  facet_wrap(~cancer_site) +
+  labs(title = "Age Distribution by Cancer Type",
+       y = "Number of Cases",
+       x = "Age") +
+  scale_x_discrete(limits = c("age_under5", "age5to9", "age10to14", "age15to19", "age20to24", 
+                              "age25to29", "age30to34", "age35to39", "age40to44",
+                              "age45to49", "age50to54", "age55to59", "age60to64",
+                              "age65to69", "age70to74", "age75to79", "age80to84",
+                              "age85and_over"),
+                   labels = c("<5", "5-9", "10-14", "15-19", "20-24", "25-29", 
+                              "30-34", "35-39", "40-44", "45-49", "50-54", 
+                              "55-59", "60-64", "65-69", "70-74", "75-79", 
+                              "80-84", ">85"))
+  
+```
+
+
+
+
+## Conclusions
+
+- The number of incidences of cancer in NHS Borders is rising.
+
+- Bladder, prostrate, lung and breast cancer account of 60% of all incidences.
+
+- Cancer in 26 different areas of the body have been diagnosed in NHS Borders since 1996.
+
+- 11 out of 12 of the most common cancer types have increasing numbers of incidences.
+
+
+
+
+
+
+
+## Further work 
+
+1. Conduct statistical analysis to determine which types of cancer are increasing at the fastest rate.
+
+2. Investigate SIRs to determine what types of cancer are higher in the NHS Borders region than they should be.
+
+3. Investigate non-melanoma skin cancer data.
+
+
+
+## Data Sources and References
+
+Data sourced from Public Health Scotland:  
+https://www.opendata.nhs.scot/dataset/annual-cancer-incidence
+
+Population data sources from National Records of Scotland:  
+https://www.nrscotland.gov.uk/files/statistics/council-area-data-sheets/scottish-borders-council-profile.html#table_pop_est
+
+Background reading:  
+https://publichealthscotland.scot/media/12645/2022-04-12-cancer-incidence-report.pdf
+
