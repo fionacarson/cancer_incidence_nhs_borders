@@ -20,6 +20,9 @@
 
 ## Usage
 
+The report can be viewed by opening the html file called 
+
+
 ## Further work 
 
 - Conduct statistical analysis to determine which types of cancer are increasing at the fastest rate.
@@ -43,7 +46,7 @@ https://publichealthscotland.scot/media/12645/2022-04-12-cancer-incidence-report
 
 
 ## Versions
-R version 4.2.2 (2022-10-31)
-RStudio 2022.12.0+353
-tidyverse_1.3.1
+R version 4.2.2 (2022-10-31)  
+RStudio 2022.12.0+353  
+tidyverse_1.3.1  
 
