@@ -1,26 +1,24 @@
-# Incidence of Cancer in NHS Borders
-
-## Background
-
+# Cancer Incidence in NHS Borders
 
 ## Purpose
+The incidence of cancer in NHS Borders was investigated to help inform planning for the future provision of cancer treatment services (mock task).
+
+## Usage
+An html document containing a full report on the analysis was created using R Markdown. To view the analysis in html format download the cancer_incidence_data_investigation.html file from the analysis folder and open in a browser. The R code can be viewed by selecting view code from the drop down menus. 
 
 
 ## Key Findings
 
-- The number of incidences of cancer in NHS Borders is rising.
+- The population of the Borders region of Scotland is rising.
+
+- The number of incidences of cancer in NHS Borders is also rising but at a faster rate than can be accounted for by the population increase. 
 
 - Bladder, prostrate, lung and breast cancer account of 60% of all incidences.
 
-- Cancer in 26 different areas of the body have been diagnosed in NHS Borders since 1996.
+- A pronounced spike in the number of cancer diagnoses is observed every 3 years. Upon further analysis this spike was found to come from the breast cancer data and research indicates GP practices only take part in screening programmes every 3 years. 
 
-- 11 out of 12 of the most common cancer types have increasing numbers of incidences.
+- 11 out of 12 of the most common cancer types have increasing numbers of incidences (only leukaemias are not increasing).
 
-
-
-## Usage
-
-The report can be viewed by opening the html file called 
 
 
 ## Further work 
