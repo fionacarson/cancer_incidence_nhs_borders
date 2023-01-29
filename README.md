@@ -1,13 +1,13 @@
-# Cancer Incidence in NHS Borders
+## Cancer Incidence in NHS Borders
 
-## Purpose
+### Purpose
 The incidence of cancer in NHS Borders was investigated to help inform planning for the future provision of cancer treatment services (mock task).
 
-## Usage
+### Usage
 An html document containing a full report on the analysis was created using R Markdown. To view the analysis in html format download the cancer_incidence_data_investigation.html file from the analysis folder and open in a browser. The R code can be viewed by selecting view code from the drop down menus. 
 
 
-## Key Findings
+### Key Findings
 
 - The population of the Borders region of Scotland is rising.
 
@@ -21,7 +21,7 @@ An html document containing a full report on the analysis was created using R Ma
 
 
 
-## Further work 
+### Further work 
 
 - Conduct statistical analysis to determine which types of cancer are increasing at the fastest rate.
 
@@ -30,7 +30,7 @@ An html document containing a full report on the analysis was created using R Ma
 - Investigate non-melanoma skin cancer data.
 
 
-## Data Sources and References
+### Data Sources and References
 
 Data sourced from Public Health Scotland:  
 https://www.opendata.nhs.scot/dataset/annual-cancer-incidence
@@ -43,7 +43,7 @@ https://publichealthscotland.scot/media/12645/2022-04-12-cancer-incidence-report
 
 
 
-## Versions
+### Versions
 R version 4.2.2 (2022-10-31)  
 RStudio 2022.12.0+353  
 tidyverse_1.3.1  
